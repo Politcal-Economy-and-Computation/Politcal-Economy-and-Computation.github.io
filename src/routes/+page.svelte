@@ -1,18 +1,30 @@
 <script>
+  import { onMount } from "svelte";
   import Franklin from "$lib/Franklin.svelte";
   import Spin from "$lib/Spin.svelte";
 
   let pageX = 0;
   let pageY = 0;
+
+  let author;
+  let body;
+  onMount(async () => {
+    const quote = await fetch("https://leftist-quotes.com").then((res) =>
+      res.json(),
+    );
+    author = quote.attribution;
+    body = quote.body;
+  });
+  let maxHeight;
 </script>
 
 <svelte:window on:mousemove={(e) => ({ pageX, pageY } = e)} />
-<Franklin {pageX} {pageY} />
-<Franklin {pageX} {pageY} offset={300} />
-<Franklin {pageX} {pageY} offset={600} />
-<Franklin {pageX} {pageY} offset={900} />
-<Franklin {pageX} {pageY} offset={1200} />
-<div class="wrapper">
+<Franklin {maxHeight} {pageX} {pageY} />
+<Franklin {maxHeight} {pageX} {pageY} offset={300} />
+<Franklin {maxHeight} {pageX} {pageY} offset={600} />
+<Franklin {maxHeight} {pageX} {pageY} offset={900} />
+<Franklin {maxHeight} {pageX} {pageY} offset={1200} />
+<div class="wrapper" bind:clientHeight={maxHeight}>
   <main>
     <h1>Political economy and algorithms collective</h1>
 
@@ -79,6 +91,15 @@
       funding from the University of Michigan through the Rackham
       Interdisciplinary Workshop grants and MDemocracy grant.
     </p>
+    <hr />
+    <br />
+    <p>
+      {body}
+    </p>
+    <p class="attribution">
+      --{author}
+    </p>
+    <div class="spacer" style="height: 10rem;" />
   </main>
 </div>
 
@@ -109,11 +130,22 @@
     margin: 2rem 0;
   }
 
+  hr {
+    height: 0.1rem;
+    background: black;
+    width: 100%;
+  }
+
   .small-picture {
     position: absolute;
     left: 100px;
     top: 65px;
     width: 275px;
+  }
+
+  .attribution {
+    text-align: right;
+    align-self: end;
   }
 
   p {

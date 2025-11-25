@@ -4,6 +4,8 @@
   export let pageY = 0;
   export let offset = 0;
 
+  export let maxHeight;
+
   let ms = 0;
   let start = 0;
   let frame = 0;
@@ -29,12 +31,16 @@
 
     return () => cancelAnimationFrame(frame);
   });
+
+  let clientHeight;
 </script>
 
 <img
   src="/franklin.png"
   alt="$100 bill"
   height="auto"
-  style="width: 50px; height: auto; position: absolute; top: {pageY +
-    ms}px; left: {pageX - 50}px"
+  style="width: 50px; height: auto; position: absolute; top: {Math.min(
+    pageY + ms,
+    maxHeight,
+  )}px; left: {pageX - 50}px"
 />
